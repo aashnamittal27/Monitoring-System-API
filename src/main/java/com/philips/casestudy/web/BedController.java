@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import com.philips.casestudy.domain.Bed;
+import com.philips.casestudy.domain.NursingStation;
 import com.philips.casestudy.service.BedService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 /*
     int addNewBed(Bed bed, int stationId);
     List<Bed> getAllBeds(int stationId);
     Bed findBed(int bedId);
     void deleteExistingBed(int bedId);*/
+@RestController
 public class BedController {
 
     @Autowired
@@ -26,19 +29,19 @@ public class BedController {
 
     @RequestMapping(value = "/api/beds", method = RequestMethod.POST)
     public ResponseEntity<Bed> addStation(@RequestBody Bed bed){
-
         try{
-            int id = bedService.addNewBed(bed, bed.getStation().getStationId() );
+            int id = bedService.addNewBed(bed, bed.getStation().getStationId());
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(URI.create("/api/beds/"+id));
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         }
         catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(value = "/api/icu/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/icu/{id}/beds", method = RequestMethod.GET)
     public List<Bed> getAllStations(@PathVariable("id") int stationId){
         return bedService.getAllBeds(stationId);
     }
@@ -56,7 +59,7 @@ public class BedController {
         }
     }
 
-    @RequestMapping(value = "/api/bed/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/beds/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Bed> deleteStation(@PathVariable("id")int id){
 
         Bed bed = bedService.findBed(id);

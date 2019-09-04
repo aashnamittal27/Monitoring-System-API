@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import com.philips.casestudy.domain.Bed;
 import com.philips.casestudy.domain.NursingStation;
@@ -21,7 +20,7 @@ public class JpaBedDAO implements BedDAO {
 
     @Override
     public Bed save(Bed bed, int stationId) {
-       
+
         NursingStation nursingStation = em.find(NursingStation.class, stationId);
         bed.setStation(nursingStation);
         em.persist(bed);
@@ -31,9 +30,19 @@ public class JpaBedDAO implements BedDAO {
     @Override
     public List<Bed> findAll(int stationId) {
         // we want to fetch all beds within an ICU
-        Query q = em.createQuery("select b from Bed b where b.stationId = :paramId").setParameter("paramId", stationId);
-        List<Bed> beds = q.getResultList();
+        List<Bed> beds = em.find(NursingStation.class, stationId).getBeds();
+        // List<Bed> beds = new ArrayList<>();
+        // if (station.getBeds().size() > 0) {
+
+        //     /*
+        //      * it will be b.station as hibernate uses property names for entity classes by
+        //      * relying on getter and setter methods
+        //      */
+        //     Query q = em.createQuery("select b from Bed b where b.station = :id").setParameter("id", stationId);
+        //     beds = q.getResultList();
+        // }
         return beds;
+
     }
 
     @Override
@@ -42,12 +51,13 @@ public class JpaBedDAO implements BedDAO {
     }
 
     @Override
-	public void deletebyId(int bedId) { // deleting a bed and updating the list of beds in ICU
+    public void deletebyId(int bedId) { // deleting a bed and updating the list of beds in ICU
         Bed bed = findById(bedId);
+        if(bed != null){
         NursingStation station = bed.getStation();
         station.removeBed(bed);
-        em.createQuery("delete b from Bed b where b.bedId = :paramId").setParameter("paramId", bedId).executeUpdate();
-        
-	}
+        em.createQuery("delete from Bed b where b.bedId = :paramId").setParameter("paramId", bedId).executeUpdate();
+        }
+    }
 
 }

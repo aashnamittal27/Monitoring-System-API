@@ -1,10 +1,8 @@
 package com.philips.casestudy.dal;
 
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import com.philips.casestudy.domain.Bed;
 import com.philips.casestudy.domain.Patient;
@@ -23,6 +21,7 @@ public class JpaPatientDAO implements PatientDAO {
     public Patient save(Patient patient, int bedId) {
         Bed bed = em.find(Bed.class, bedId);
         patient.setBed(bed);
+        bed.setPatient(patient);
         em.persist(patient);
         return patient;
     }
@@ -48,10 +47,7 @@ public class JpaPatientDAO implements PatientDAO {
         bed.setPatient(null);
         bed.setOccupancystatus();
         */
-
-        Query q = em.createQuery("select p from Patient p where p.id = :paramId").setParameter("paramId", id);
-        List<Patient> patientList = q.getResultList(); // To Do -> try to do this by JPA query nesting
-        Patient patient = patientList.get(0);
+        Patient patient = findById(id);
         Bed bed = patient.getBed();
 
         // int bedId = em.createQuery("select bed_id from Patient p where p.id = :paramId").setParameter("paramId", id).getFirstResult(); // To Check the getFirstResult() works correctly !!!!!!!!!!!1

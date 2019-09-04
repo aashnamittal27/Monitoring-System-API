@@ -27,10 +27,8 @@ public class JpaNursingStationDAO implements NursingStationDAO {
     @Override
     public List<NursingStation> findAll() {
 
-        Query q = em.createQuery("select ns from NursingStation ns");
-        List<NursingStation> nursingStations = q.getResultList(); // https://developer.jboss.org/thread/3163 warning
-                                                                  // resolution
-        return nursingStations;
+       return em.createQuery("select ns from NursingStation ns").getResultList();
+       
     }
 
     @Override
@@ -46,7 +44,7 @@ public class JpaNursingStationDAO implements NursingStationDAO {
         NursingStation station = findById(stationId);
         if (station.getBeds().size() > 0) {
             // List<Bed> beds= checkBedRecords.getResultList();
-            Query bedQ = em.createQuery("delete from bed b where b.stationId = :paramID"); // check if it will be station_id ?????
+            Query bedQ = em.createQuery("delete from bed b where b.station_id = :paramID"); // check if it will be station_id ?????
             bedQ.setParameter("paramId", stationId);
             bedQ.executeUpdate();
         }

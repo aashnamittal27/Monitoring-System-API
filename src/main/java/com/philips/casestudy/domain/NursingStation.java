@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class NursingStation {
 
@@ -28,6 +31,7 @@ public class NursingStation {
 
   int bedCapacity;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "station")
   List<Bed> beds = new ArrayList<>(); // the cascade for deleting icu should delete all beds in it but cascade is
                                       // unreliable so use another way
@@ -84,4 +88,11 @@ public class NursingStation {
   public void removeBed(Bed bed) {
     beds.remove(bed);
   }
+
+  @Override
+  public String toString() {
+    return "NursingStation [bedCapacity=" + bedCapacity + ", level=" + level + ", name=" + name + ", stationId="
+        + stationId + "]";
+  }
+
 }

@@ -22,7 +22,7 @@ public class NursingStationController{
     @Autowired
     NursingStationService stationService;
 
-    @RequestMapping(value = "/api/icu", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/icu", method = RequestMethod.POST) // add a new icus
     public ResponseEntity<NursingStation> addStation(@RequestBody NursingStation station){
         System.out.println(stationService == null);
         try{
