@@ -3,10 +3,8 @@ package com.philips.casestudy.service;
 import java.util.List;
 
 import com.philips.casestudy.dal.BedDAO;
-import com.philips.casestudy.dal.NursingStationDAO;
 import com.philips.casestudy.domain.Bed;
 
-import org.dom4j.IllegalAddException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +14,10 @@ public class BedServiceImpl implements BedService {
     @Autowired
     BedDAO bedDao;
 
-    @Autowired
-    NursingStationDAO stationDao;
+    // @Autowired
+    // NursingStationDAO stationDao;
 
-    @Override
+/*    @Override
     public int addNewBed(Bed bed, int stationId) { // before adding a new Bed check if the ICU can accomodate a bed
 
         //NursingStation station = // get the station by DAO **********
@@ -32,11 +30,23 @@ public class BedServiceImpl implements BedService {
             throw new IllegalAddException(
                     "No more beds can be added to the nursing station, try increasing station capacity first");
         }
+    }*/
+
+     @Override
+    public int addNewBed(Bed bed) {
+
+        Bed savedBed = bedDao.save(bed);
+        return savedBed.getBedId();
+        
     }
 
-    @Override
-    public List<Bed> getAllBeds(int stationId) {
-        return bedDao.findAll(stationId); // change
+    // @Override
+    // public List<Bed> getAllBeds(int stationId) {
+    //     return bedDao.findAll(stationId); // change
+    // }
+
+    public List<Bed> getAllBeds(){
+        return bedDao.findAll();
     }
 
     @Override
@@ -46,6 +56,15 @@ public class BedServiceImpl implements BedService {
 
     @Override
     public void deleteExistingBed(int bedId) {
-        bedDao.deletebyId(bedId);
+
+        Bed bed = bedDao.findById(bedId);
+        if(bed.getisAvailable())
+            bedDao.deletebyId(bedId);
+		else
+			try {
+				throw new Exception("Bed can't be deleted");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
     }
 }

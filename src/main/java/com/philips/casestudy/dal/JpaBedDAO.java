@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.philips.casestudy.domain.Bed;
-import com.philips.casestudy.domain.NursingStation;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,15 +18,23 @@ public class JpaBedDAO implements BedDAO {
     @PersistenceContext
     EntityManager em;
 
-    @Override
-    public Bed save(Bed bed, int stationId) {
+    // @Override
+    // public Bed save(Bed bed, int stationId) {
+    //     // adds bed wrt to station
 
-        NursingStation nursingStation = em.find(NursingStation.class, stationId);
-        bed.setStation(nursingStation);
+    //     NursingStation nursingStation = em.find(NursingStation.class, stationId);
+    //     bed.setStation(nursingStation);
+    //     em.persist(bed);
+    //     return bed;
+    // }
+
+    public Bed save(Bed bed){
+
         em.persist(bed);
         return bed;
     }
 
+    /*
     @Override
     public List<Bed> findAll(int stationId) {
         // we want to fetch all beds within an ICU
@@ -41,7 +49,13 @@ public class JpaBedDAO implements BedDAO {
         //     Query q = em.createQuery("select b from Bed b where b.station = :id").setParameter("id", stationId);
         //     beds = q.getResultList();
         // }
-        return beds;
+       // return beds;
+
+   // }*/
+
+    public List<Bed> findAll(){
+        Query q = em.createQuery("select b from Bed b");
+        return q.getResultList();
 
     }
 
@@ -50,13 +64,21 @@ public class JpaBedDAO implements BedDAO {
         return em.find(Bed.class, bedId);
     }
 
-    @Override
-    public void deletebyId(int bedId) { // deleting a bed and updating the list of beds in ICU
+    // @Override
+    // public void deletebyId(int bedId) { // deleting a bed and updating the list of beds in ICU
+    //     Bed bed = findById(bedId);
+    //     if(bed != null){
+    //     NursingStation station = bed.getStation();
+    //     station.removeBed(bed);
+    //     em.createQuery("delete from Bed b where b.bedId = :paramId").setParameter("paramId", bedId).executeUpdate();
+    //     }
+    // }
+
+    public void deletebyId(int bedId)
+    {
         Bed bed = findById(bedId);
-        if(bed != null){
-        NursingStation station = bed.getStation();
-        station.removeBed(bed);
-        em.createQuery("delete from Bed b where b.bedId = :paramId").setParameter("paramId", bedId).executeUpdate();
+        if(bed!=null){
+            em.remove(bed);
         }
     }
 

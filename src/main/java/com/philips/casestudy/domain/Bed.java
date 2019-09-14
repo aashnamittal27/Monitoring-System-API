@@ -8,8 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,9 +23,9 @@ public class Bed {// links to icu(1->Many) in rel //links to pt in 1-1 rel
   @Column(name = "availability")
   boolean isAvailable;
 
-  @ManyToOne
-  @JoinColumn(name = "station_id")
-  NursingStation station;
+  // @ManyToOne
+  // @JoinColumn(name = "station_id")
+  // NursingStation station;
 
   @JsonIgnore
   @OneToOne(mappedBy = "bed")
@@ -65,13 +64,13 @@ public class Bed {// links to icu(1->Many) in rel //links to pt in 1-1 rel
     this.isAvailable = (this.getPatient() == null) ? true : false;
   }
 
-  public NursingStation getStation() {
-    return station;
-  }
+  // public NursingStation getStation() {
+  //   return station;
+  // }
 
-  public void setStation(NursingStation station) {
-    this.station = station;
-  }
+  // public void setStation(NursingStation station) {
+  //   this.station = station;
+  // }
 
   @Override
   public String toString() {

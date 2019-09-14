@@ -1,5 +1,7 @@
 package com.philips.casestudy.service;
 
+import java.util.List;
+
 import com.philips.casestudy.dal.BedDAO;
 import com.philips.casestudy.dal.PatientDAO;
 import com.philips.casestudy.domain.Bed;
@@ -21,6 +23,8 @@ public class PatientServiceImpl implements PatientService {
     public int addNewPatient(Patient patient, int bedId) { // add a patient to this bed only if the bed is free
         Bed bed = beddao.findById(bedId); 
         if(bed.getisAvailable()){ // bed is free
+           patient.setBed(bed);
+           bed.setPatient(patient);
            Patient savedPatient = patientdao.save(patient, bedId);
            return savedPatient.getId();
         }
@@ -29,10 +33,10 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
-   /* @Override
+    @Override
     public List<Patient> getAllPatients() {
-        return null;
-    }*/
+        return patientdao.findAll();
+    }
 
     @Override
     public Patient getPatient(int patientId) {

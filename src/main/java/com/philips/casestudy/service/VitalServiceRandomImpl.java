@@ -29,9 +29,9 @@ public class VitalServiceRandomImpl implements VitalServiceRandom {
             }
         };
         List<MonitoringVitals> newList = generateAlertingStream(vitals);
-        System.out.println("--------");
-        for(MonitoringVitals vital: vitals)
-        System.out.println(vital);
+        // System.out.println("--------");
+        // for(MonitoringVitals vital: vitals)
+        // System.out.println(vital);
         return newList;
 
         // ObjectMapper obj = new ObjectMapper();

@@ -1,6 +1,7 @@
 package com.philips.casestudy.web;
 
 import java.net.URI;
+import java.util.List;
 
 import com.philips.casestudy.domain.Bed;
 import com.philips.casestudy.domain.Patient;
@@ -18,21 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PatientController{
-
-    @Autowired
+  
     PatientService patientService;
 
-    @RequestMapping(value = "/api/patients", method = RequestMethod.POST)
+    @Autowired
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
+    }
+
+    @RequestMapping(value = "/patients", method = RequestMethod.POST)
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
 
         Bed b = patient.getBed();
-        System.out.println(b);
         int bedId = b.getBedId();
         
         try{
             int id = patientService.addNewPatient(patient,bedId);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("/api/patients/"+id));
+            headers.setLocation(URI.create("/patients/"+id));
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         }
         catch (Exception e) {
@@ -41,12 +45,12 @@ public class PatientController{
         }
     }
 
-  /*  @RequestMapping(value = "/api/icu/{id}/beds/{bid}/patients", method = RequestMethod.GET)
-    public List<Patient> getAllStations(){
-        return stationService.getAllStations();
-    }*/
+    @RequestMapping(value = "/patients", method = RequestMethod.GET)
+    public List<Patient> getAllPatients(){
+        return patientService.getAllPatients();
+    }
 
-    @RequestMapping(value = "/api/patients/{pid}", method = RequestMethod.GET)
+    @RequestMapping(value = "/patients/{pid}", method = RequestMethod.GET)
     public ResponseEntity<Patient> getPatientById(@PathVariable("pid")int id){
         
         Patient patient = patientService.getPatient(id);
@@ -59,11 +63,11 @@ public class PatientController{
         }
     }
 
-    @RequestMapping(value = "/api/patients/{pid}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/patients/{pid}", method = RequestMethod.DELETE)
     public ResponseEntity<Patient> dischargePatient(@PathVariable("pid") int id){
 
-        Patient station = patientService.getPatient(id);
-        if(station!=null){
+        Patient patient = patientService.getPatient(id);
+        if(patient!=null){
             patientService.dischargePatient(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -71,4 +75,5 @@ public class PatientController{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }

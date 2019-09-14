@@ -21,7 +21,7 @@ public class VitalController{
     @Autowired
     PatientService patientService;
 
-    @RequestMapping(value = "/api/monitor/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/monitor/{id}", method = RequestMethod.GET)
     public List<MonitoringVitals> getAllStations(@PathVariable("id") int patientId){
         
         // Patient patient = patientService.getPatient(patientId);

@@ -9,7 +9,8 @@ public class PulseRate implements MonitoringVitals {
 	private final int upperSleepingRate = 60;
 	private final int upperRestingRate = 100;
 	private final int upperExerciseRate = 220;
-    private final int highestPulseRate=254;
+	private final int highestPulseRate=254;
+	String vitalName = "PulseRate";
 
     
     public PulseRate(int reading) { // constructor
@@ -71,4 +72,9 @@ public class PulseRate implements MonitoringVitals {
 	public String getResult() {
 		return result;
 	}
+
+	public String getVitalName() {
+		return vitalName;
+	}
+
 }
