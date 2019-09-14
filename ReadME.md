@@ -50,3 +50,36 @@ see this first 	@RequestMapping(value="/api/publishers", method=RequestMethod.GE
         }
 	}
 }
+
+1. General logic -> input validation should be done by browser and not by server= client side validation
+
+
+<plugin>
+<groupId>org.jacoco</groupId>
+<artifactId>jacoco-maven-plugin</artifactId>
+<executions>
+<execution>
+<id>prepare-agent</id>
+<goals>
+<goal>prepare-agent</goal>
+</goals>
+</execution>
+<execution>
+<id>report</id>
+<phase>prepare-package</phase>
+<goals>
+<goal>report</goal>
+</goals>
+</execution>
+</executions>
+</plugin>
+mvn clean jacoco:prepare-agent install jacoco:report 
+ 
+
+then go to jacoco in target>site>jacoco then Alt+Shift+R to see the folder and then open the index file there to see coverage
+
+
+ADD BED last branch coverage
+ADD patient occupied bed
+
+mvn clean jacoco:prepare-agent install jacoco:reports

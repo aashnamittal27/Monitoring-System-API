@@ -1,8 +1,10 @@
 package com.philips.casestudy.dal;
 
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import com.philips.casestudy.domain.Bed;
 import com.philips.casestudy.domain.Patient;
@@ -19,18 +21,23 @@ public class JpaPatientDAO implements PatientDAO {
 
     @Override
     public Patient save(Patient patient, int bedId) {
-        Bed bed = em.find(Bed.class, bedId);
-        patient.setBed(bed);
-        bed.setPatient(patient);
+        // get bed obj 
+        // set the bed for patient
+        // set bed for patient
+        // set patient for bed
+
+        // Bed bed = em.find(Bed.class, bedId);
+        // patient.setBed(bed);
+        // bed.setPatient(patient);
         em.persist(patient);
         return patient;
     }
 
-  /*  @Override
-    public List<Patient> findAll() { // this is different as we want to display all patients in ICU
+    @Override
+    public List<Patient> findAll() {
         Query q = em.createQuery("select p from Patient p");
         return q.getResultList();
-    }*/
+    }
 
     @Override
     public Patient findById(int id) {
@@ -55,7 +62,7 @@ public class JpaPatientDAO implements PatientDAO {
         bed.setPatient(null);
         bed.setisAvailable();
 
-        em.createQuery("delete p from Patient p where p.id = :paramId").setParameter("paramId", id).executeUpdate();
+        em.createQuery("delete from Patient p where p.id = :paramId").setParameter("paramId", id).executeUpdate();
 	}
 
 }

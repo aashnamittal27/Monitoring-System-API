@@ -5,8 +5,10 @@ import java.util.List;
 
 public interface BedDAO {
 
-    Bed save(Bed bed,int stationId);
-    List<Bed> findAll(int stationId); // display all beds in an ICU
+    // Bed save(Bed bed,int stationId);
+    Bed save(Bed bed);
+    // List<Bed> findAll(int stationId); // display all beds in an ICU
+    List<Bed> findAll();
     Bed findById(int bedId);
     void deletebyId(int bedId);
 

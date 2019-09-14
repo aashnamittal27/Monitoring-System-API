@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface MonitoringVitals {
+
     public List<String> monitorStatus = new ArrayList<String>() {
         private static final long serialVersionUID = 1L;
 

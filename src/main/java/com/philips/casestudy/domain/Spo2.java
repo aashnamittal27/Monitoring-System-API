@@ -8,6 +8,8 @@ public class Spo2 implements MonitoringVitals {
     private final double upperAcceptableReading = 95;
     private final double lowerAcceptableReading = 90;
     private final double lowerUnsafeLevelReading = 70;
+    String vitalName = "Spo2";
+
 
     public Spo2(double reading) {
         this.reading = reading;
@@ -53,6 +55,10 @@ public class Spo2 implements MonitoringVitals {
 
     public String getResult() {
 		return result;
+    }
+    
+    public String getVitalName() {
+		return vitalName;
 	}
 
 }

@@ -9,7 +9,8 @@ public class Temperature implements MonitoringVitals{
 	private final double upperAcceptableFeverReading = 100.5;
 	private final double upperConcernFeverReading = 103.1;
     private final double maxFeverValue=108;
-    String result;
+	String result;
+	String vitalName = "Temperature";
 
     public Temperature(double reading) {
         this.reading = reading;
@@ -67,5 +68,8 @@ public class Temperature implements MonitoringVitals{
 	}
 	public String getResult() {
 		return result;
+	}
+	public String getVitalName() {
+		return vitalName;
 	}
 }

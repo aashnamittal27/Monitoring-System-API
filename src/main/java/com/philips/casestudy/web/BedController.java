@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import com.philips.casestudy.domain.Bed;
-import com.philips.casestudy.domain.NursingStation;
 import com.philips.casestudy.service.BedService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,30 +22,61 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BedController {
 
-    @Autowired
     BedService bedService;
+    
+    @Autowired
+    public void setBedService(BedService bedService) {
+        this.bedService = bedService;
+    }
 
-    @RequestMapping(value = "/api/beds", method = RequestMethod.POST)
-    public ResponseEntity<Bed> addStation(@RequestBody Bed bed){
+    int bedLimit=10;
+
+    // @RequestMapping(value = "/api/beds", method = RequestMethod.POST)
+    // public ResponseEntity<Bed> addStation(@RequestBody Bed bed){
+    //     try{
+    //         int id = bedService.addNewBed(bed, bed.getStation().getStationId());
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.setLocation(URI.create("/api/beds/"+id));
+    //         return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    //     }
+    //     catch (Exception e) {
+    //         e.printStackTrace();
+    //         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    //     }
+    // }
+
+    @RequestMapping(value = "/beds", method = RequestMethod.POST)
+    public ResponseEntity<Bed> addBed(){
+
+        Bed bed = new Bed(true);
+        int size = getAllBeds().size();
+        if(size==bedLimit)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         try{
-            int id = bedService.addNewBed(bed, bed.getStation().getStationId());
+            int id = bedService.addNewBed(bed);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("/api/beds/"+id));
+            headers.setLocation(URI.create("/beds/"+id));
             return new ResponseEntity<>(headers, HttpStatus.CREATED);
         }
-        catch (Exception e) {
+        catch(Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    @RequestMapping(value = "/api/icu/{id}/beds", method = RequestMethod.GET)
-    public List<Bed> getAllStations(@PathVariable("id") int stationId){
-        return bedService.getAllBeds(stationId);
+    // @RequestMapping(value = "/api/beds", method = RequestMethod.GET)
+    // public List<Bed> getAllStations(@PathVariable("id") int stationId){
+    //     return bedService.getAllBeds();
+    // }
+    @RequestMapping(value = "/beds", method = RequestMethod.GET)
+    public List<Bed> getAllBeds()
+    {
+        return bedService.getAllBeds();
     }
 
-    @RequestMapping(value = "/api/beds/{bid}", method = RequestMethod.GET)
-    public ResponseEntity<Bed> getStationById(@PathVariable("bid")int id){
+    @RequestMapping(value = "/beds/{bid}", method = RequestMethod.GET)
+    public ResponseEntity<Bed> getBedById(@PathVariable("bid")int id){
         
         Bed bed = bedService.findBed(id);
 
@@ -59,16 +88,16 @@ public class BedController {
         }
     }
 
-    @RequestMapping(value = "/api/beds/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Bed> deleteStation(@PathVariable("id")int id){
+    // @RequestMapping(value = "/beds/{id}", method = RequestMethod.DELETE)
+    // public ResponseEntity<Bed> deleteStation(@PathVariable("id")int id){
 
-        Bed bed = bedService.findBed(id);
-        if(bed!=null){
-            bedService.deleteExistingBed(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+    //     Bed bed = bedService.findBed(id);
+    //     if(bed!=null){
+    //         bedService.deleteExistingBed(id);
+    //         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    //     }
+    //     else{
+    //         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //     }
+    // }
 }
