@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.philips.casestudy.domain.Bed;
-import com.philips.casestudy.domain.NursingStation;
+import com.philips.casestudy.utils.GenericUtils;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,46 +18,34 @@ public class JpaBedDAO implements BedDAO {
     @PersistenceContext
     EntityManager em;
 
-    @Override
-    public Bed save(Bed bed, int stationId) {
+    public void setEntityManager(EntityManager em) {
+        this.em = em;
+    }
 
-        NursingStation nursingStation = em.find(NursingStation.class, stationId);
-        bed.setStation(nursingStation);
+    @Override
+    public Bed addBed(Bed bed) {
         em.persist(bed);
         return bed;
     }
 
     @Override
-    public List<Bed> findAll(int stationId) {
-        // we want to fetch all beds within an ICU
-        List<Bed> beds = em.find(NursingStation.class, stationId).getBeds();
-        // List<Bed> beds = new ArrayList<>();
-        // if (station.getBeds().size() > 0) {
-
-        //     /*
-        //      * it will be b.station as hibernate uses property names for entity classes by
-        //      * relying on getter and setter methods
-        //      */
-        //     Query q = em.createQuery("select b from Bed b where b.station = :id").setParameter("id", stationId);
-        //     beds = q.getResultList();
-        // }
-        return beds;
-
+    public List<Bed> findAll() {
+        return GenericUtils.castList(Bed.class, em.createQuery("select b from Bed b").getResultList());
     }
 
     @Override
-    public Bed findById(int bedId) {
+    public Bed findBed(int bedId) {
         return em.find(Bed.class, bedId);
     }
 
     @Override
-    public void deletebyId(int bedId) { // deleting a bed and updating the list of beds in ICU
-        Bed bed = findById(bedId);
-        if(bed != null){
-        NursingStation station = bed.getStation();
-        station.removeBed(bed);
+    public void deleteBed(int bedId) { // deleting a bed and updating the list of beds in ICU
         em.createQuery("delete from Bed b where b.bedId = :paramId").setParameter("paramId", bedId).executeUpdate();
-        }
     }
 
+    @Override
+    public void update(Bed bed) {
+        if (bed == null) return;
+        em.merge(bed);
+    }
 }

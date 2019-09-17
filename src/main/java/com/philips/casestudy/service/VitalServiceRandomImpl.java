@@ -4,15 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.philips.casestudy.domain.MonitoringVitals;
-import com.philips.casestudy.domain.PulseRate;
-import com.philips.casestudy.domain.Spo2;
-import com.philips.casestudy.domain.Temperature;
-
 import org.springframework.stereotype.Service;
 
 @Service
-public class VitalServiceRandomImpl implements VitalServiceRandom {
+public class VitalServiceRandomImpl  {
 
     public List<MonitoringVitals> initialiseVitals() { // objects created
         MonitoringVitals pulseRate =(MonitoringVitals)new PulseRate(generateRandomIntegerForVitals(28, 257));
@@ -82,7 +77,9 @@ public class VitalServiceRandomImpl implements VitalServiceRandom {
             alertList.add(vital);
             System.out.println(vital);
         }
+
         return alertList;
     }
 
+    
 }

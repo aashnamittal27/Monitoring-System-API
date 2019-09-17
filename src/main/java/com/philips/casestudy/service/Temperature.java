@@ -1,6 +1,6 @@
-package com.philips.casestudy.domain;
+package com.philips.casestudy.service;
 
-public class Temperature implements MonitoringVitals{
+public class Temperature implements MonitoringVitals {
 
     private double reading;
 	private final double minFeverValue=93;
@@ -50,13 +50,8 @@ public class Temperature implements MonitoringVitals{
 		}
 		// display();
 		// return result;
-    }
-
-    @Override
-    public void display() {
-		System.out.println(result);
-    }
-
+	}
+	
 	public double getReading() {
         return reading;
     }

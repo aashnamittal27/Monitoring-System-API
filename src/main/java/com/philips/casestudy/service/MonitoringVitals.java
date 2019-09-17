@@ -1,4 +1,4 @@
-package com.philips.casestudy.domain;
+package com.philips.casestudy.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 public interface MonitoringVitals {
     public List<String> monitorStatus = new ArrayList<String>() {
         private static final long serialVersionUID = 1L;
-
         {
             add("undetectably low reading");
             add("low reading - Care needed");
@@ -19,6 +18,4 @@ public interface MonitoringVitals {
     };
 
     public void vitalChecker();
-
-    public void display();
 }

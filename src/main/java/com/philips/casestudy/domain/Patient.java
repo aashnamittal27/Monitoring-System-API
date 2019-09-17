@@ -3,14 +3,13 @@
  */
 package com.philips.casestudy.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Patient {
@@ -22,9 +21,9 @@ public class Patient {
   int age;
   String phoneNumber;
 
-  // coln name = bed_id
-  @OneToOne
-  @JoinColumn(name ="bed_id")
+  // @OneToOne(mappedBy = "patient")
+  @OneToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name="bed_id")
   Bed bed;
 
   public Patient() {
@@ -73,6 +72,18 @@ public class Patient {
   }
 
   public void setBed(Bed bed) {
-    this.bed = bed;
+    if (bed == null) {
+      this.bed.setisAvailable(true);
+      this.bed = null;
+    } else {
+      this.bed = bed; 
+      this.bed.setisAvailable(false);
+    }
   }
+
+  @Override
+  public String toString() {
+    return "Patient [age=" + age + ", id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + "]";
+  }
+
 }

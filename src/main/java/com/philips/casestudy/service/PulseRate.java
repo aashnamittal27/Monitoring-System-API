@@ -1,4 +1,6 @@
-package com.philips.casestudy.domain;
+package com.philips.casestudy.service;
+
+import com.philips.casestudy.service.MonitoringVitals;
 
 public class PulseRate implements MonitoringVitals {
 
@@ -23,12 +25,10 @@ public class PulseRate implements MonitoringVitals {
 		{
 			// result= "Device can't measure pulse rate lower than 30";
 			result = monitorStatus.get(0);
-
 		}
 		else if(this.reading >= lowestPulseRate && this.reading < lowerSleepingRate) {
 			// result = "Below healthy resting pulse rates.";
 			result = monitorStatus.get(1);
-			
 		}
 		else if(this.reading >= lowerSleepingRate && this.reading < upperSleepingRate) {
 			// result = "Normal pulse rate for sleeping.";
@@ -53,20 +53,10 @@ public class PulseRate implements MonitoringVitals {
 		// display();
 		// return result;
     }
-
-    @Override
-    public void display() {
-		System.out.println(result);
-    }
     
 	public double getReading() {
         return reading;
     }
-
-	@Override
-	public String toString() {
-		return "PulseRate [reading=" + reading + ", result=" + result + "]";
-	}
 
 	public String getResult() {
 		return result;

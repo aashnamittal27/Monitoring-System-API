@@ -1,4 +1,4 @@
-package com.philips.casestudy.domain;
+package com.philips.casestudy.service;
 
 public class Spo2 implements MonitoringVitals {
 
@@ -35,11 +35,6 @@ public class Spo2 implements MonitoringVitals {
             result = monitorStatus.get(0);
         }
 		// display();
-    }
-
-    @Override
-    public void display() {
-        System.out.println(result);
     }
 
     public double getReading() {

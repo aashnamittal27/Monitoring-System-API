@@ -1,6 +1,7 @@
 package com.philips.casestudy.web;
-
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.philips.casestudy.domain.Bed;
 import com.philips.casestudy.domain.Patient;
@@ -22,53 +23,58 @@ public class PatientController{
     @Autowired
     PatientService patientService;
 
-    @RequestMapping(value = "/api/patients", method = RequestMethod.POST)
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
-
-        Bed b = patient.getBed();
-        System.out.println(b);
-        int bedId = b.getBedId();
-        
-        try{
-            int id = patientService.addNewPatient(patient,bedId);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("/api/patients/"+id));
-            return new ResponseEntity<>(headers, HttpStatus.CREATED);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public void setPatientService(PatientService patientService) {
+        this.patientService = patientService;
     }
 
-  /*  @RequestMapping(value = "/api/icu/{id}/beds/{bid}/patients", method = RequestMethod.GET)
-    public List<Patient> getAllStations(){
-        return stationService.getAllStations();
-    }*/
+    @RequestMapping(value = "/patient", method = RequestMethod.POST)
+    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
 
-    @RequestMapping(value = "/api/patients/{pid}", method = RequestMethod.GET)
-    public ResponseEntity<Patient> getPatientById(@PathVariable("pid")int id){
+        Bed b = patient.getBed();
+        int bedId = b.getBedId();
+        
+        Patient p = patientService.addNewPatient(patient, bedId);
+
+        if (p == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/patient/" + p.getId()));
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/patient", method = RequestMethod.GET)
+    public ResponseEntity<List<Patient>> getAllPatients() {
+        List<Patient> patients = patientService.getAllPatients();
+        if (patients == null) {
+            return new ResponseEntity<>(new ArrayList<Patient>(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(patients, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/patient/{pid}", method = RequestMethod.GET)
+    public ResponseEntity<Patient> getPatientById(@PathVariable("pid") int id){
         
         Patient patient = patientService.getPatient(id);
 
-        if(patient!=null){
+        if (patient != null) {
             return new ResponseEntity<>(patient, HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @RequestMapping(value = "/api/patients/{pid}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/patient/{pid}", method = RequestMethod.DELETE)
     public ResponseEntity<Patient> dischargePatient(@PathVariable("pid") int id){
 
-        Patient station = patientService.getPatient(id);
-        if(station!=null){
-            patientService.dischargePatient(id);
+        Patient patient = patientService.getPatient(id);
+        if (patient != null) {
+            boolean flag = patientService.dischargePatient(id);
+            if (flag)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
