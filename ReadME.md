@@ -8,6 +8,7 @@ The Monitoring System takes patient's vital signs as input from patient-monitori
 2. [Compiling](#Compiling)
 3. [Executing](#Executing)
 4. [APIs Created](#ApiCreated)
+5. [Goal Set and Achieved](#Goalset)
 
 ## Prerequisites
 Firstly, the project makes use of a batch file in order to build the source files and hence, the target system must have a Windows environment.
@@ -22,11 +23,19 @@ Run the batch file in the command line and it will compile the sources and execu
 ```  
 Once the batch file has sucessfully executed, you should be able to see a `"build successful"` message.
 
-NOTE : This AutoBuildTest.bat also runs JaCoCo code coverage library and you can check the code coverage report by opening `"index.html"` in browser. 
+NOTE 1: This AutoBuildTest.bat also runs JaCoCo code coverage library and you can check the code coverage report by opening `"index.html"` in browser. 
 
 ```
 ./target/site/jacoco> index.html
 ```
+
+NOTE 2: This AutoBuildTest.bat also runs javancss cyclomatic cmplexity measuring library and you can check the cyclomatic complexity report by opening `"javancss.html"` in browser. 
+
+```
+./target/site> javancss.html
+```
+
+
 ## Execution
 Once the batch file has been run, a binary will be put in the target folder and it will have the name "casestudy-0.0.1-SNAPSHOT.jar".
 In order to run the application, move to target folder and  open the commandline and copy paste the below command.  
